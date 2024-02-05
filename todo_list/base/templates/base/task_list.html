@@ -1,0 +1,48 @@
+{% extends 'base/main.html' %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+    <p><h3>welcome {{request.user}}</h3></p>
+    <a href="{% url 'logout' %}" style="text-decoration: none;">Logout</a>
+{% else %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{message}}</p>
+        {% endfor %}
+    {% endif %}
+    <a href="{% url 'login' %}">Login</a>
+{% endif %}
+<hr>
+<h1 class="text-center">Your todo list</h1>
+<div>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+      </svg>
+    <i class="bi bi-plus-circle-fill"></i>
+    <a href="{% url 'task-create' %}" style="text-decoration: none;">add item </a>
+</div>
+
+
+<div class="input-group mb-3">
+    <form method="GET" class="form-control">
+        <input type="text" name="search_area" style="border-radius: 5px;" >
+        <button  type="submit" class="btn btn-outline-secondary">Search</button>
+    </form>
+</div>
+
+<table class="table table-striped">
+    <tr>
+        <th>Item</th>
+    </tr>
+    {% for task in tasks %}
+        <tr>
+            <td>{{task.title}}</td>
+            <td><a href="{% url 'task-update' task.id %}" style="text-decoration: none;">Edit</a></td>
+            <td><a href="{% url 'task-delete' task.id %}" style="text-decoration: none;">Delete</a></td>
+        </tr>
+    {% empty %}
+        <h3>No task</h3>
+    {% endfor %}
+</table>
+
+{% endblock %}
